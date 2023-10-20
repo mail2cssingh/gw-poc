@@ -1,0 +1,421 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: identity_route_1
+          uri: http://localhost:1010
+          predicates:
+            - name: Custom
+              args:
+                path: /aggregator
+                provider: NOWTV
+        - id: identity_route_2
+          uri: http://localhost:2020
+          predicates:
+            - name: Custom
+              args:
+                path: /aggregator
+                provider: NOWTV2
+        - id: identity_route_default
+          uri: http://localhost:3030
+          predicates:
+            - name: Custom
+              args:
+                path: /aggregator
+
+
+        - id: aggregator
+          metadata:
+            "downstream-name": aggregator
+            "health-check-path": /info
+          predicates:
+            - args:
+                proxies: |
+                  [
+                    {
+                      "methods": [
+                        {
+                          "method": "DELETE",
+                          "restrictions": [
+                            {
+                              "allowedRoles": [ "APP-OVP-GLOBALACCESSUPDATE-RWD" ],
+                              "territories": [
+                                "AT",
+                                "GB",
+                                "IE",
+                                "US"
+                              ]
+                            },
+                            {
+                              "allowedRoles": [ "APP-CRM-RWD" ],
+                              "territories": [
+                                "DE",
+                                "IT"
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "method": "POST",
+                          "restrictions": [
+                            {
+                              "allowedRoles": [ "APP-OVP-GLOBALACCESSUPDATE-RW" ],
+                              "territories": [
+                                "AT",
+                                "GB",
+                                "IE",
+                                "US"
+                              ]
+                            },
+                            {
+                              "allowedRoles": [
+                                "APP-CRM-RW",
+                                "APP-CRM-RWD"
+                              ],
+                              "territories": [
+                                "DE",
+                                "IT"
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "path": "/profile/id/{profileid}/globalaccess"
+                    },
+                    {
+                      "methods": [
+                        {
+                          "method": "GET",
+                          "restrictions": [
+                            {
+                              "allowedRoles": [
+                                "APP-CRM-R",
+                                "APP-CRM-RW",
+                                "APP-CRM-RWD"
+                              ],
+                              "territories": [
+                                "DE",
+                                "AT",
+                                "IT",
+                                "IE",
+                                "US"
+                              ]
+                            },
+                            {
+                              "allowedRoles": [
+                                "APP-CRM-R",
+                                "APP-CRM-RW",
+                                "APP-CRM-RWD",
+                                "BT-USER"
+                              ],
+                              "territories": [ "GB" ]
+                            }
+                          ]
+                        }
+                      ],
+                      "path": "/profile"
+                    },
+                    {
+                      "methods": [
+                        {
+                          "method": "GET",
+                          "restrictions": [
+                            {
+                              "allowedRoles": [
+                                "APP-CRM-R",
+                                "APP-CRM-RW",
+                                "APP-CRM-RWD"
+                              ],
+                              "territories": [
+                                "DE",
+                                "AT",
+                                "IT",
+                                "IE",
+                                "US"
+                              ]
+                            },
+                            {
+                              "allowedRoles": [
+                                "APP-CRM-R",
+                                "APP-CRM-RW",
+                                "APP-CRM-RWD",
+                                "BT-USER"
+                              ],
+                              "territories": [ "GB" ]
+                            }
+                          ]
+                        }
+                      ],
+                      "path": "/profile/id/{profileid}"
+                    },
+                    {
+                      "methods": [
+                        {
+                          "method": "GET",
+                          "restrictions": [
+                            {
+                              "allowedRoles": [
+                                "APP-CRM-R",
+                                "APP-CRM-RW",
+                                "APP-CRM-RWD",
+                                "ONE-TRUST"
+                              ],
+                              "territories": [
+                                "DE",
+                                "IT",
+                                "GB",
+                                "AT",
+                                "IE"
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "method": "PUT",
+                          "restrictions": [
+                            {
+                              "allowedRoles": [
+                                "APP-CRM-RW",
+                                "APP-CRM-RWD",
+                                "ONE-TRUST"
+                              ],
+                              "territories": [
+                                "DE",
+                                "IT",
+                                "GB",
+                                "AT",
+                                "IE"
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "path": "/userstore/{nsprofileid}/groupoptouts"
+                    },
+                    {
+                      "methods": [
+                        {
+                          "method": "POST",
+                          "restrictions": [
+                            {
+                              "allowedRoles": [ "OVP-LOCKSTATUS-R" ],
+                              "territories": [
+                                "DE",
+                                "AT",
+                                "IT",
+                                "GB",
+                                "IE",
+                                "US"
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "path": "/management/credentials/status"
+                    },
+                    {
+                      "methods": [
+                        {
+                          "method": "POST",
+                          "restrictions": [
+                            {
+                              "allowedRoles": [ "OVP-UNLOCK-RW" ],
+                              "territories": [
+                                "DE",
+                                "AT",
+                                "IT",
+                                "GB",
+                                "IE",
+                                "US"
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "path": "/management/profiles/id/{profileid}/activate"
+                    },
+                    {
+                      "methods": [
+                        {
+                          "method": "POST",
+                          "restrictions": [
+                            {
+                              "allowedRoles": [
+                                "APP-CRM-RW",
+                                "APP-CRM-RWD"
+                              ],
+                              "territories": [
+                                "DE",
+                                "GB",
+                                "IE",
+                                "IT",
+                                "AT"
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "path": "/management/profiles/id/{profileid}/email/{newemail}"
+                    },
+                    {
+                      "methods": [
+                        {
+                          "method": "POST",
+                          "restrictions": [
+                            {
+                              "allowedRoles": [ "OVP-LOCK-RW" ],
+                              "territories": [
+                                "DE",
+                                "AT",
+                                "IT",
+                                "GB",
+                                "IE",
+                                "US"
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "path": "/management/profiles/id/{profileid}/inactivate"
+                    },
+                    {
+                      "methods": [
+                        {
+                          "method": "DELETE",
+                          "restrictions": [
+                            {
+                              "allowedRoles": [ "APP-CRM-RWD" ],
+                              "territories": [
+                                "IT",
+                                "GB",
+                                "IE"
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "method": "GET",
+                          "restrictions": [
+                            {
+                              "allowedRoles": [
+                                "APP-CRM-R",
+                                "APP-CRM-RW",
+                                "APP-CRM-RWD"
+                              ],
+                              "territories": [
+                                "IT",
+                                "GB",
+                                "IE"
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "path": "/sessions/{nsprofileid}/devices"
+                    },
+                    {
+                      "methods": [
+                        {
+                          "method": "POST",
+                          "restrictions": [
+                            {
+                              "allowedRoles": [
+                                "APP-CRM-RW",
+                                "APP-CRM-RWD"
+                              ],
+                              "territories": [
+                                "DE",
+                                "AT",
+                                "IT",
+                                "GB",
+                                "IE",
+                                "US"
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "path": "/profile/id/{profileid}/details/contact/mobile"
+                    },
+                    {
+                      "methods": [
+                        {
+                          "method": "POST",
+                          "restrictions": [
+                            {
+                              "allowedRoles": [
+                                "APP-CRM-RW",
+                                "APP-CRM-RWD"
+                              ],
+                              "territories": [
+                                "DE",
+                                "AT",
+                                "IT",
+                                "GB",
+                                "IE",
+                                "US"
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "path": "/profile/id/{profileid}/details/name"
+                    },
+                    {
+                      "methods": [
+                        {
+                          "method": "POST",
+                          "restrictions": [
+                            {
+                              "allowedRoles": [
+                                "APP-CRM-RW",
+                                "APP-CRM-RWD"
+                              ],
+                              "territories": [
+                                "DE",
+                                "AT",
+                                "IT",
+                                "GB",
+                                "IE",
+                                "US"
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "path": "/profile/id/{profileid}/email"
+                    },
+                    {
+                      "methods": [
+                        {
+                          "method": "DELETE",
+                          "restrictions": [
+                            {
+                              "allowedRoles": [ "APP-CRM-RWD" ],
+                              "territories": [ "IT" ]
+                            }
+                          ]
+                        }
+                      ],
+                      "path": "/profiles/id/{profileid}"
+                    },
+                    {
+                      "methods": [
+                        {
+                          "method": "PUT",
+                          "restrictions": [
+                            {
+                              "allowedRoles": [
+                                "APP-CRM-RW",
+                                "APP-CRM-RWD"
+                              ],
+                              "territories": [ "IT" ]
+                            }
+                          ]
+                        }
+                      ],
+                      "path": "/profile/id/{profileid}/details/euportability"
+                    }
+                  ]
+              name: Proxies
+          uri: "http://localhost:1010"
